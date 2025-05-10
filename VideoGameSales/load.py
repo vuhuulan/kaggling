@@ -1,7 +1,7 @@
 import os
 import shutil
 import kagglehub
-import pandas
+import pandas as pd
 from pandas.core.frame import DataFrame as DF
 
 TARGET = "anandshaw2001/video-game-sales"
@@ -11,17 +11,29 @@ FNAME = "vgsales.csv"
 
 def load_df() -> DF:
     if os.listdir(SAVE_PATH):
-        return pandas.read_csv(os.path.join(SAVE_PATH, FNAME))
+        return pd.read_csv(os.path.join(SAVE_PATH, FNAME))
     fp = kagglehub.dataset_download(TARGET)
     shutil.copy(fp + "/" + FNAME, SAVE_PATH)
-    return pandas.read_csv(os.path.join(SAVE_PATH, FNAME))
+    return pd.read_csv(os.path.join(SAVE_PATH, FNAME))
+
+
+def clean(df: DF) -> DF:
+    df = df.dropna()
+
+    return df
 
 
 def explore(df: DF) -> None:
+    # Number of rows/games
+    print(len(df.index))
+
+    # Get games with NaN year
     action_games = df[df["Genre"] == "Action"]
-    # print(df[df["Genre"] == "Action"].count())
-    print(action_games[action_games["Year"].isna()])
-    # print(df.groupby(["Genre"]).count())
+    print(action_games[pd.isna(action_games["Year"])])
+
+    # Clean the df
+    clean_df = clean(df)
+    print(len(clean_df.index))
 
 
 def main() -> None:

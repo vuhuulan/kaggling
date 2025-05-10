@@ -24,3 +24,5 @@ What does this mean? How can we further investigate this?
 Assume that every game is uniquely named, then there are 3316 games. If all the
 games are properly noted, then we should have 3316 of every other thing, in
 other words, there are some games lacked information on "Year" and "Publisher".
+
+We can clean this with the `dropna()` function. Easey!!
